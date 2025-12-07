@@ -1,0 +1,938 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>小朋友來了｜十周年紀念背心</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans TC", sans-serif;
+      background: #0a0a0a;
+      color: #fff;
+      line-height: 1.8;
+    }
+
+    /* Hero Carousel */
+    .carousel {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      max-height: 600px;
+      overflow: hidden;
+    }
+
+    .carousel-inner {
+      display: flex;
+      width: 300%;
+      height: 100%;
+      transition: transform 0.5s ease-in-out;
+    }
+
+    .carousel-slide {
+      width: 33.333%;
+      height: 100%;
+      flex-shrink: 0;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .carousel-slide .bg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: blur(20px);
+      transform: scale(1.1);
+      z-index: 1;
+    }
+
+    .carousel-slide .main {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      z-index: 2;
+    }
+
+    .carousel-dots {
+      position: absolute;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 12px;
+      z-index: 10;
+    }
+
+    .carousel-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.4);
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .carousel-dot.active {
+      background: #fff;
+      transform: scale(1.2);
+    }
+
+    .carousel-arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 50px;
+      height: 50px;
+      background: rgba(0, 0, 0, 0.5);
+      border: none;
+      border-radius: 50%;
+      color: #fff;
+      font-size: 24px;
+      cursor: pointer;
+      z-index: 10;
+      transition: background 0.3s;
+    }
+
+    .carousel-arrow:hover {
+      background: rgba(0, 0, 0, 0.8);
+    }
+
+    .carousel-arrow.prev { left: 20px; }
+    .carousel-arrow.next { right: 20px; }
+
+    /* Section Common */
+    section {
+      padding: 50px 20px;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    h1, h2, h3 {
+      font-weight: 700;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    h2 {
+      font-size: 1.8rem;
+      margin: 0 0 20px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid #ff6b35;
+    }
+
+    h3 {
+      font-size: 1.3rem;
+      margin: 25px 0 10px;
+      color: #ff6b35;
+    }
+
+    p {
+      margin-bottom: 15px;
+      color: #ccc;
+    }
+
+    .highlight {
+      color: #fff;
+      font-weight: 600;
+    }
+
+    /* Intro Section */
+    .intro {
+      text-align: center;
+      background: linear-gradient(180deg, #0a0a0a 0%, #1a1a1a 100%);
+    }
+
+    .intro .tagline {
+      font-size: 1.5rem;
+      color: #ff6b35;
+      margin-bottom: 30px;
+    }
+
+    .intro p {
+      font-size: 1.1rem;
+      max-width: 700px;
+      margin: 0 auto 20px;
+    }
+
+    /* Design Philosophy */
+    .philosophy-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 30px;
+    }
+
+    .philosophy-item {
+      background: #1a1a1a;
+      padding: 30px;
+      border-radius: 12px;
+      text-align: center;
+      transition: transform 0.3s;
+    }
+
+    .philosophy-item:hover {
+      transform: translateY(-5px);
+    }
+
+    .philosophy-item .icon {
+      font-size: 3rem;
+      margin-bottom: 15px;
+    }
+
+    .philosophy-item h3 {
+      margin-top: 0;
+    }
+
+    /* Style Gallery - Swiper */
+    .style-section {
+      padding: 50px 0;
+      background: #111;
+      max-width: 100%;
+      overflow: hidden;
+    }
+
+    .style-section h2 {
+      max-width: 1000px;
+      margin: 0 auto 20px;
+      padding: 0 20px 10px;
+      border-bottom: 2px solid #ff6b35;
+    }
+
+    .swiper-container {
+      width: 100%;
+      padding: 40px 0;
+      overflow: visible;
+      position: relative;
+    }
+
+    .swiper-wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+      transition: transform 0.4s ease;
+    }
+
+    .swiper-slide {
+      flex-shrink: 0;
+      width: 220px;
+      height: 300px;
+      border-radius: 12px;
+      overflow: hidden;
+      transition: all 0.4s ease;
+      opacity: 0.5;
+      transform: scale(0.9);
+      cursor: grab;
+    }
+
+    .swiper-slide.active {
+      width: 320px;
+      height: 420px;
+      opacity: 1;
+      transform: scale(1);
+      box-shadow: 0 20px 60px rgba(255, 107, 53, 0.3);
+      z-index: 10;
+    }
+
+    .swiper-slide img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      pointer-events: none;
+    }
+
+    .swiper-nav {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin-top: 30px;
+    }
+
+    .swiper-btn {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: #ff6b35;
+      border: none;
+      color: #fff;
+      font-size: 20px;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .swiper-btn:hover {
+      background: #ff8c5a;
+      transform: scale(1.1);
+    }
+
+    .swiper-dots {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .swiper-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.3);
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .swiper-dot.active {
+      background: #ff6b35;
+      transform: scale(1.3);
+    }
+
+    .section-subtitle {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 0 20px;
+      color: #ccc;
+      text-align: center;
+    }
+
+    .price-banner {
+      background: url('images/main_view.png') center/cover no-repeat;
+      padding: 20px;
+      text-align: center;
+      height: 120px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .price-amount {
+      font-size: 2.5rem;
+      font-weight: 900;
+      color: #fff;
+      display: block;
+      text-shadow:
+        3px 3px 0 #000,
+        -3px -3px 0 #000,
+        3px -3px 0 #000,
+        -3px 3px 0 #000,
+        3px 0 0 #000,
+        -3px 0 0 #000,
+        0 3px 0 #000,
+        0 -3px 0 #000,
+        0 0 15px rgba(0, 0, 0, 1);
+    }
+
+    .price-note {
+      font-size: 1rem;
+      color: #fff;
+      display: block;
+      margin-top: 5px;
+      text-shadow:
+        2px 2px 0 #000,
+        -2px -2px 0 #000,
+        2px -2px 0 #000,
+        -2px 2px 0 #000,
+        2px 0 0 #000,
+        -2px 0 0 #000,
+        0 2px 0 #000,
+        0 -2px 0 #000,
+        0 0 10px rgba(0, 0, 0, 1);
+    }
+
+    .scene-info {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+      margin: 30px auto 0;
+      padding: 20px 30px;
+      background: linear-gradient(135deg, #1a1a1a 0%, #252525 100%);
+      border-radius: 16px;
+      max-width: 400px;
+      border: 1px solid #333;
+      transition: all 0.4s ease;
+    }
+
+    .scene-icon {
+      font-size: 3rem;
+      transition: transform 0.3s ease;
+    }
+
+    .scene-text {
+      text-align: left;
+    }
+
+    .scene-name {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: #fff;
+      transition: all 0.3s ease;
+    }
+
+    .scene-style {
+      font-size: 1rem;
+      color: #ff6b35;
+      margin-top: 4px;
+      transition: all 0.3s ease;
+    }
+
+    .scene-rating {
+      font-size: 1.2rem;
+      color: #ffd700;
+      letter-spacing: 2px;
+    }
+
+    /* Scene Table */
+    .table-wrapper {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      margin: 20px 0;
+    }
+
+    .scene-table {
+      width: 100%;
+      min-width: 400px;
+      border-collapse: collapse;
+    }
+
+    .scene-table th,
+    .scene-table td {
+      padding: 15px;
+      text-align: left;
+      border-bottom: 1px solid #333;
+      white-space: nowrap;
+    }
+
+    .scene-table th {
+      background: #1a1a1a;
+      color: #ff6b35;
+    }
+
+    .scene-table tr:hover {
+      background: #1a1a1a;
+    }
+
+    /* Specs */
+    .specs-list {
+      list-style: none;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 15px;
+      margin-top: 20px;
+    }
+
+    .specs-list li {
+      background: #1a1a1a;
+      padding: 15px 20px;
+      border-radius: 8px;
+      border-left: 3px solid #ff6b35;
+    }
+
+    .specs-list strong {
+      color: #ff6b35;
+    }
+
+    /* Size Chart */
+    .size-table-wrapper {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      margin: 20px 0;
+    }
+
+    .size-table {
+      width: 100%;
+      min-width: 500px;
+      border-collapse: collapse;
+    }
+
+    .size-table th,
+    .size-table td {
+      padding: 15px 12px;
+      text-align: center;
+      border: 1px solid #333;
+      white-space: nowrap;
+    }
+
+    .size-table th {
+      background: #ff6b35;
+      color: #fff;
+      font-size: 0.9rem;
+    }
+
+    .size-table td {
+      background: #1a1a1a;
+    }
+
+    /* Styling Tips */
+    .styling-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 25px;
+      margin-top: 30px;
+    }
+
+    .styling-card {
+      background: linear-gradient(135deg, #1a1a1a 0%, #252525 100%);
+      padding: 30px;
+      border-radius: 12px;
+      border: 1px solid #333;
+    }
+
+    .styling-card h3 {
+      margin-top: 0;
+    }
+
+    .styling-card p {
+      font-family: monospace;
+      font-size: 1rem;
+      color: #aaa;
+    }
+
+    /* Order Section */
+    .order-section {
+      background: linear-gradient(180deg, #1a1a1a 0%, #0a0a0a 100%);
+      text-align: center;
+    }
+
+    .order-section h2 {
+      border: none;
+      color: #ff6b35;
+      font-size: 2rem;
+    }
+
+    .order-notice {
+      font-size: 1.2rem;
+      color: #ff6b35;
+      margin-bottom: 30px;
+    }
+
+    .google-form-container {
+      background: #fff;
+      border-radius: 12px;
+      overflow: hidden;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    .google-form-container iframe {
+      width: 100%;
+      height: 800px;
+      border: none;
+    }
+
+    .form-placeholder {
+      background: #1a1a1a;
+      border: 2px dashed #333;
+      border-radius: 12px;
+      padding: 60px 20px;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    .form-placeholder p {
+      color: #666;
+    }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 40px 20px;
+      background: #000;
+      color: #666;
+    }
+
+    /* Main Visual */
+    .main-visual {
+      width: 100%;
+      height: 120px;
+      overflow: hidden;
+    }
+
+    .main-visual img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      h1 { font-size: 1.8rem; }
+      h2 { font-size: 1.4rem; }
+
+      section { padding: 40px 15px; }
+
+      .carousel { max-height: 400px; }
+
+      .carousel-arrow {
+        width: 40px;
+        height: 40px;
+        font-size: 18px;
+      }
+
+      .swiper-slide {
+        width: 150px;
+        height: 200px;
+      }
+
+      .swiper-slide.active {
+        width: 240px;
+        height: 320px;
+      }
+
+      .scene-table th,
+      .scene-table td {
+        padding: 10px;
+        font-size: 0.9rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Hero Carousel -->
+  <div class="carousel">
+    <div class="carousel-inner">
+      <div class="carousel-slide">
+        <img class="bg" src="images/render.png" alt="">
+        <img class="main" src="images/render.png" alt="十周年紀念背心">
+      </div>
+      <div class="carousel-slide">
+        <img class="bg" src="images/basic_front.png" alt="">
+        <img class="main" src="images/basic_front.png" alt="背心正面">
+      </div>
+      <div class="carousel-slide">
+        <img class="bg" src="images/basic_back.png" alt="">
+        <img class="main" src="images/basic_back.png" alt="背心背面">
+      </div>
+    </div>
+    <button class="carousel-arrow prev">&#10094;</button>
+    <button class="carousel-arrow next">&#10095;</button>
+    <div class="carousel-dots">
+      <span class="carousel-dot active" data-index="0"></span>
+      <span class="carousel-dot" data-index="1"></span>
+      <span class="carousel-dot" data-index="2"></span>
+    </div>
+  </div>
+
+  <!-- Price Banner -->
+  <div class="price-banner">
+    <span class="price-amount">NT$ 300</span>
+    <span class="price-note">一件 300 錯過不再</span>
+  </div>
+
+  <!-- Intro Section -->
+  <section class="intro">
+    <h1>小朋友來了｜十周年紀念背心</h1>
+    <p class="tagline">十年了，我們還在燒。</p>
+    <p>這不只是一件背心，這是「小朋友來了」十年友情的證明——一群在社會中摸爬滾打、被現實烤得焦香的大人們，用一件背心宣告：我們還活著，而且活得很帶勁。</p>
+    <p>黑色基底，白色圖騰。低調中帶點囂張，沉穩裡藏著叛逆。前胸一枚精緻小 logo，後背一整片燃燒的靈魂。拉鍊一拉，你就是那個最 chill 又最 real 的存在。</p>
+  </section>
+
+  <!-- Design Philosophy -->
+  <section>
+    <h2>設計理念｜水深火熱生存包</h2>
+    <p>背後那個燃燒的 SPULL(小朋友來了) 工具箱，藏著我們的生存哲學：</p>
+
+    <div class="philosophy-grid">
+      <div class="philosophy-item">
+        <div class="icon">🔧</div>
+        <h3>扳手</h3>
+        <p>人生螺絲鬆了？自己轉緊。沒有什麼問題是電通工具男解決不了的。</p>
+      </div>
+      <div class="philosophy-item">
+        <div class="icon">🌭</div>
+        <h3>香腸</h3>
+        <p>再忙也要吃飯，再累也要張簡姊姊家的豬肉大餐。這是小朋友們的聚會精神——不管世界怎麼轉，我們的烤肉架不能停。</p>
+      </div>
+      <div class="philosophy-item">
+        <div class="icon">🔥</div>
+        <h3>火焰</h3>
+        <p>不是我們選擇燃燒，是生活逼的。但既然都燒了，就燒得漂亮點。</p>
+      </div>
+      <div class="philosophy-item">
+        <div class="icon">📦</div>
+        <h3>電通工具箱</h3>
+        <p>裝的不是工具，是我們這群人的求生意志和一點點幽默感。十年來，我們用這個箱子裝過歡笑、裝過眼淚、裝過數不清的啤酒罐。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Style Gallery + Versatility -->
+  <section class="style-section">
+    <h2>百搭宣言｜適合日常所有風格</h2>
+    <p class="section-subtitle">這件背心已通過「小朋友認證」實測：</p>
+
+    <div class="swiper-container">
+      <div class="swiper-wrapper">
+        <div class="swiper-slide" data-scene="🌋 火山前拍照" data-style="狂野冒險">
+          <img src="images/extense_1.jpg" alt="火山前拍照">
+        </div>
+        <div class="swiper-slide" data-scene="🐠 水族館約會" data-style="清新可愛">
+          <img src="images/extense_2.jpg" alt="水族館約會">
+        </div>
+        <div class="swiper-slide active" data-scene="🏗️ 工地監工" data-style="專業幹練">
+          <img src="images/extense_3.jpg" alt="工地監工">
+        </div>
+        <div class="swiper-slide" data-scene="🧨 廟會湊熱鬧" data-style="本土熱血">
+          <img src="images/extense_4.jpg" alt="廟會湊熱鬧">
+        </div>
+        <div class="swiper-slide" data-scene="💼 都市麗人" data-style="低調時尚">
+          <img src="images/extense_5.jpg" alt="都市麗人">
+        </div>
+      </div>
+    </div>
+
+    <div class="scene-info">
+      <div class="scene-icon" id="sceneIcon">🏗️</div>
+      <div class="scene-text">
+        <div class="scene-name" id="sceneName">工地監工</div>
+        <div class="scene-style" id="sceneStyle">專業幹練</div>
+      </div>
+      <div class="scene-rating">★★★★★</div>
+    </div>
+
+    <div class="swiper-nav">
+      <button class="swiper-btn swiper-prev">&#10094;</button>
+      <button class="swiper-btn swiper-next">&#10095;</button>
+    </div>
+    <div class="swiper-dots">
+      <span class="swiper-dot" data-index="0"></span>
+      <span class="swiper-dot" data-index="1"></span>
+      <span class="swiper-dot active" data-index="2"></span>
+      <span class="swiper-dot" data-index="3"></span>
+      <span class="swiper-dot" data-index="4"></span>
+    </div>
+
+    <p class="highlight" style="text-align: center; font-size: 1.2rem; margin-top: 30px;">從 chill 到 chaos，一件搞定。</p>
+    <p style="text-align: center; color: #ccc;">不管你是要去海邊放空、還是被老闆放火，這件背心都能讓你看起來像是故意的。</p>
+  </section>
+
+  <!-- Size Chart -->
+  <section>
+    <h2>尺寸建議</h2>
+    <div class="size-table-wrapper">
+    <table class="size-table">
+      <thead>
+        <tr>
+          <th>尺寸</th>
+          <th>衣長（cm）</th>
+          <th>胸圍（cm）</th>
+          <th>建議身高</th>
+          <th>建議體重</th>
+          <th>參照物</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>M</td><td>64</td><td>50</td><td>160~165</td><td>55~65kg</td><td>長頸鹿, 猴猴</td></tr>
+        <tr><td>L</td><td>70</td><td>56</td><td>165~175</td><td>70~75kg</td><td>水泥姊姊, 孟寶</td></tr>
+        <tr><td>XL</td><td>74</td><td>60</td><td>175~185</td><td>85~95kg</td><td>安安綠綠約約</td></tr>
+      </tbody>
+    </table>
+    </div>
+  </section>
+
+  <!-- Order Section -->
+  <section class="order-section">
+    <h2>立即訂購</h2>
+    <p class="order-notice">🛒 限量發售中｜售完不補｜錯過再等十年</p>
+
+    <div class="google-form-container">
+        <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSdva4Zgx7qkkdodxv_COTHVX2Q6nXBKl3DrcvG2VpLl9fWo2g/viewform?embedded=true" >載入中…</iframe>
+    </div>
+
+  </section>
+
+  <!-- Main Visual Bottom -->
+  <div class="main-visual">
+    <img src="images/main_view.png" alt="主視覺">
+  </div>
+
+  <script>
+    // Hero Carousel
+    const carousel = {
+      inner: document.querySelector('.carousel-inner'),
+      dots: document.querySelectorAll('.carousel-dot'),
+      prevBtn: document.querySelector('.carousel-arrow.prev'),
+      nextBtn: document.querySelector('.carousel-arrow.next'),
+      currentIndex: 0,
+      total: 3,
+      autoPlayInterval: null,
+
+      init() {
+        this.prevBtn.addEventListener('click', () => this.prev());
+        this.nextBtn.addEventListener('click', () => this.next());
+        this.dots.forEach(dot => {
+          dot.addEventListener('click', (e) => {
+            this.goTo(parseInt(e.target.dataset.index));
+          });
+        });
+        this.startAutoPlay();
+      },
+
+      goTo(index) {
+        this.currentIndex = index;
+        this.inner.style.transform = `translateX(-${index * 33.333}%)`;
+        this.dots.forEach((dot, i) => {
+          dot.classList.toggle('active', i === index);
+        });
+        this.resetAutoPlay();
+      },
+
+      next() {
+        this.goTo((this.currentIndex + 1) % this.total);
+      },
+
+      prev() {
+        this.goTo((this.currentIndex - 1 + this.total) % this.total);
+      },
+
+      startAutoPlay() {
+        this.autoPlayInterval = setInterval(() => this.next(), 5000);
+      },
+
+      resetAutoPlay() {
+        clearInterval(this.autoPlayInterval);
+        this.startAutoPlay();
+      }
+    };
+
+    carousel.init();
+
+    // Style Swiper with Touch Support
+    const swiper = {
+      wrapper: document.querySelector('.swiper-wrapper'),
+      slides: document.querySelectorAll('.swiper-slide'),
+      dots: document.querySelectorAll('.swiper-dots .swiper-dot'),
+      prevBtn: document.querySelector('.swiper-prev'),
+      nextBtn: document.querySelector('.swiper-next'),
+      currentIndex: 2,
+      total: 5,
+      startX: 0,
+      isDragging: false,
+
+      init() {
+        this.prevBtn.addEventListener('click', () => this.prev());
+        this.nextBtn.addEventListener('click', () => this.next());
+        this.dots.forEach(dot => {
+          dot.addEventListener('click', (e) => {
+            this.goTo(parseInt(e.target.dataset.index));
+          });
+        });
+
+        // Touch events
+        this.wrapper.addEventListener('touchstart', (e) => this.touchStart(e), { passive: true });
+        this.wrapper.addEventListener('touchmove', (e) => this.touchMove(e), { passive: true });
+        this.wrapper.addEventListener('touchend', () => this.touchEnd());
+
+        // Click on slides
+        this.slides.forEach((slide, i) => {
+          slide.addEventListener('click', () => this.goTo(i));
+        });
+
+        this.updatePosition();
+      },
+
+      getPositionX(e) {
+        return e.type.includes('mouse') ? e.pageX : e.touches[0].clientX;
+      },
+
+      touchStart(e) {
+        this.isDragging = true;
+        this.startX = this.getPositionX(e);
+      },
+
+      touchMove(e) {
+        if (!this.isDragging) return;
+      },
+
+      touchEnd() {
+        if (!this.isDragging) return;
+        this.isDragging = false;
+      },
+
+      updatePosition() {
+        this.slides.forEach((slide, i) => {
+          slide.classList.toggle('active', i === this.currentIndex);
+        });
+        this.dots.forEach((dot, i) => {
+          dot.classList.toggle('active', i === this.currentIndex);
+        });
+
+        // 計算偏移量讓當前 slide 置中
+        const slideWidth = window.innerWidth <= 768 ? 170 : 240; // slide width + gap
+        const offset = (this.currentIndex - 2) * slideWidth;
+
+        this.wrapper.style.transform = `translateX(${-offset}px)`;
+
+        // 更新場景資訊
+        const activeSlide = this.slides[this.currentIndex];
+        const scene = activeSlide.dataset.scene || '';
+        const style = activeSlide.dataset.style || '';
+        const icon = scene.split(' ')[0];
+        const name = scene.replace(icon, '').trim();
+
+        document.getElementById('sceneIcon').textContent = icon;
+        document.getElementById('sceneName').textContent = name;
+        document.getElementById('sceneStyle').textContent = style;
+      },
+
+      goTo(index) {
+        this.currentIndex = index;
+        this.updatePosition();
+      },
+
+      next() {
+        this.currentIndex = (this.currentIndex + 1) % this.total;
+        this.updatePosition();
+      },
+
+      prev() {
+        this.currentIndex = (this.currentIndex - 1 + this.total) % this.total;
+        this.updatePosition();
+      }
+    };
+
+    swiper.init();
+
+    // Recalculate on resize
+    window.addEventListener('resize', () => {
+      swiper.updatePosition();
+    });
+
+    // Swipe detection
+    let touchStartX = 0;
+    let touchEndX = 0;
+    const swiperContainer = document.querySelector('.swiper-container');
+
+    swiperContainer.addEventListener('touchstart', (e) => {
+      touchStartX = e.changedTouches[0].screenX;
+    }, { passive: true });
+
+    swiperContainer.addEventListener('touchend', (e) => {
+      touchEndX = e.changedTouches[0].screenX;
+      const diff = touchStartX - touchEndX;
+      if (Math.abs(diff) > 50) {
+        if (diff > 0) {
+          swiper.next();
+        } else {
+          swiper.prev();
+        }
+      }
+    });
+  </script>
+
+</body>
+</html>
